@@ -57,7 +57,7 @@ def main():
         disk_to_move = towers[source].pop()
         towers[destination].append(disk_to_move)
         if FINAL_RESULT in (towers["B"], towers["C"]):
-            print("You've won")
+            print("You've won!")
             break
 
 
