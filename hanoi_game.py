@@ -1,7 +1,7 @@
 import sys
 from copy import copy
 
-NUMBER_OF_DISKS = 9
+NUMBER_OF_DISKS = 5
 FINAL_RESULT = list(range(NUMBER_OF_DISKS, 0, -1))
 ALLOWED_MOVES = ["AB", "AC", "BA", "BC", "CA", "CB"]
 
@@ -29,6 +29,12 @@ def display_disk(disk):
         print(f'{empty_space}{disk * "*"} {disk}{disk * "*"}{empty_space}', end="")
 
 
+def move_disk(source, destination):
+    disk_to_move = towers[source].pop()
+    towers[destination].append(disk_to_move)
+    return True
+
+
 def get_player_move(towers):
     while True:
         player_input = input("Move one disk, enter Q to quit: ").upper()
@@ -54,9 +60,9 @@ def hanoi_game(towers):
     while True:
         display_towers(towers)
         source, destination = get_player_move(towers)
-        disk_to_move = towers[source].pop()
-        towers[destination].append(disk_to_move)
+        move_disk(source, destination)
         if FINAL_RESULT in (towers["B"], towers["C"]):
+            display_towers(towers)
             print("You've won!")
             break
 
@@ -64,13 +70,11 @@ def hanoi_game(towers):
 def recursive_hanoi(disk, source, destination, helper, towers):
     display_towers(towers)
     if disk == 1:
-        disk_to_move = towers[source].pop()
-        towers[destination].append(disk_to_move)
+        move_disk(source, destination)
         display_towers(towers)
         return
     recursive_hanoi(disk - 1, source, helper, destination, towers)
-    disk_to_move = towers[source].pop()
-    towers[destination].append(disk_to_move)
+    move_disk(source, destination)
     display_towers(towers)
     recursive_hanoi(disk - 1, helper, destination, source, towers)
 
