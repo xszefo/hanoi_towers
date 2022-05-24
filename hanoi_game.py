@@ -1,7 +1,7 @@
 import sys
 from copy import copy
 
-NUMBER_OF_DISKS = 5
+NUMBER_OF_DISKS = 9
 FINAL_RESULT = list(range(NUMBER_OF_DISKS, 0, -1))
 ALLOWED_MOVES = ["AB", "AC", "BA", "BC", "CA", "CB"]
 
@@ -16,6 +16,7 @@ def display_towers(towers):
             else:
                 display_disk(tower[level])
         print()
+    print()
 
 
 def display_disk(disk):
@@ -49,8 +50,7 @@ def get_player_move(towers):
         return source, destination
 
 
-def main():
-    towers = {"A": copy(FINAL_RESULT), "B": [], "C": []}
+def hanoi_game(towers):
     while True:
         display_towers(towers)
         source, destination = get_player_move(towers)
@@ -61,5 +61,21 @@ def main():
             break
 
 
+def recursive_hanoi(disk, source, destination, helper, towers):
+    display_towers(towers)
+    if disk == 1:
+        disk_to_move = towers[source].pop()
+        towers[destination].append(disk_to_move)
+        display_towers(towers)
+        return
+    recursive_hanoi(disk - 1, source, helper, destination, towers)
+    disk_to_move = towers[source].pop()
+    towers[destination].append(disk_to_move)
+    display_towers(towers)
+    recursive_hanoi(disk - 1, helper, destination, source, towers)
+
+
 if __name__ == "__main__":
-    main()
+    towers = {"A": copy(FINAL_RESULT), "B": [], "C": []}
+    recursive_hanoi(NUMBER_OF_DISKS, "A", "C", "B", towers)
+    # hanoi_game(towers)
